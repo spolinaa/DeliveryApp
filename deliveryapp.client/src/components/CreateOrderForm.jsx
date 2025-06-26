@@ -10,6 +10,45 @@ const CreateOrderForm = ({ onCreate, onCancel }) => {
     pickupDate: ''
   });
 
+  const [errors, setErrors] = useState({
+    senderCity: '',
+    senderAddress: '',
+    receiverCity: '',
+    receiverAddress: '',
+    cargoWeight: '',
+    pickupDate: ''
+  });
+
+  const validateField = (name, value) => {
+    let error = '';
+    
+    switch (name) {
+      case 'senderCity':
+      case 'receiverCity':
+        if (!value.trim()) error = 'Это поле обязательно';
+        else if (value.length < 3) error = 'Минимум 2 символа';
+        else if (value.length > 100) error = 'Максимум 100 символов';
+        break;
+      case 'senderAddress':
+      case 'receiverAddress':
+        if (!value.trim()) error = 'Это поле обязательно';
+        else if (value.length < 5) error = 'Минимум 5 символов';
+        else if (value.length > 200) error = 'Максимум 200 символов';
+        break;
+      
+      case 'cargoWeight':
+        if (!value) error = 'Введите вес';
+        else if (isNaN(value) || parseFloat(value) <= 0) error = 'Введите число > 0';
+        else if (parseFloat(value) > 1000) error = 'Максимум 1000 кг';
+        break;
+        
+      default:
+        break;
+    }
+    
+    return error;
+  };
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({
@@ -18,14 +57,47 @@ const CreateOrderForm = ({ onCreate, onCancel }) => {
     }));
   };
 
+  const handleBlur = (e) => {
+    const { name, value } = e.target;
+    setErrors(prev => ({
+      ...prev,
+      [name]: validateField(name, value)
+    }));
+  };
+
+  const validateForm = () => {
+    const newErrors = {
+      senderCity: validateField('senderCity', formData.senderCity),
+      senderAddress: validateField('senderAddress', formData.senderAddress),
+      receiverCity: validateField('receiverCity', formData.receiverCity),
+      receiverAddress: validateField('receiverAddress', formData.receiverAddress),
+      cargoWeight: validateField('cargoWeight', formData.cargoWeight),
+      pickupDate: validateField('pickupDate', formData.pickupDate)
+    };
+    
+    setErrors(newErrors);
+    return !Object.values(newErrors).some(error => error);
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    const orderData = {
-        senderLocation:{city:formData.senderCity,address:formData.senderAddress},
-        receiverLocation:{city:formData.receiverCity,address:formData.receiverAddress},
-        cargo:{weight:parseFloat(formData.cargoWeight),pickupDate:new Date(formData.pickupDate)}
-    };
-    onCreate(orderData);
+    if (validateForm()) {
+      const orderData = {
+        senderLocation: {
+          city: formData.senderCity,
+          address: formData.senderAddress
+        },
+        receiverLocation: {
+          city: formData.receiverCity,
+          address: formData.receiverAddress
+        },
+        cargo: {
+          weight: parseFloat(formData.cargoWeight),
+          pickupDate: new Date(formData.pickupDate)
+        }
+      };
+      onCreate(orderData);
+    }
   };
 
   return (
@@ -39,8 +111,9 @@ const CreateOrderForm = ({ onCreate, onCancel }) => {
             name="senderCity"
             value={formData.senderCity}
             onChange={handleInputChange}
-            required
+            onBlur={handleBlur}
           />
+          {errors.senderCity && <div className="error-message">{errors.senderCity}</div>}
         </div>
         
         <div className="form-group">
@@ -50,8 +123,9 @@ const CreateOrderForm = ({ onCreate, onCancel }) => {
             name="senderAddress"
             value={formData.senderAddress}
             onChange={handleInputChange}
-            required
+            onBlur={handleBlur}
           />
+          {errors.senderAddress && <div className="error-message">{errors.senderAddress}</div>}
         </div>
         
         <div className="form-group">
@@ -61,8 +135,9 @@ const CreateOrderForm = ({ onCreate, onCancel }) => {
             name="receiverCity"
             value={formData.receiverCity}
             onChange={handleInputChange}
-            required
+            onBlur={handleBlur}
           />
+          {errors.receiverCity && <div className="error-message">{errors.receiverCity}</div>}
         </div>
         
         <div className="form-group">
@@ -72,8 +147,9 @@ const CreateOrderForm = ({ onCreate, onCancel }) => {
             name="receiverAddress"
             value={formData.receiverAddress}
             onChange={handleInputChange}
-            required
+            onBlur={handleBlur}
           />
+          {errors.receiverAddress && <div className="error-message">{errors.receiverAddress}</div>}
         </div>
         
         <div className="form-group">
@@ -83,11 +159,12 @@ const CreateOrderForm = ({ onCreate, onCancel }) => {
             name="cargoWeight"
             value={formData.cargoWeight}
             onChange={handleInputChange}
-            required
+            onBlur={handleBlur}
             min="0.1"
             max="1000"
             step="0.1"
           />
+          {errors.cargoWeight && <div className="error-message">{errors.cargoWeight}</div>}
         </div>
         
         <div className="form-group">
@@ -97,8 +174,9 @@ const CreateOrderForm = ({ onCreate, onCancel }) => {
             name="pickupDate"
             value={formData.pickupDate}
             onChange={handleInputChange}
-            required
+            onBlur={handleBlur}
           />
+          {errors.pickupDate && <div className="error-message">{errors.pickupDate}</div>}
         </div>
         
         <div className="form-actions">
@@ -109,5 +187,6 @@ const CreateOrderForm = ({ onCreate, onCancel }) => {
     </div>
   );
 };
+
 
 export default CreateOrderForm;

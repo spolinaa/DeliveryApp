@@ -4,12 +4,12 @@ namespace DeliveryApp.Models;
 
 public record Location
 {
-    [Required(ErrorMessage = "Город обязателен")]
-    [StringLength(100, MinimumLength = 2, ErrorMessage = "Название города должно быть от 2 до 100 символов")]
+    [Required(ErrorMessage = "Р“РѕСЂРѕРґ РѕР±СЏР·Р°С‚РµР»РµРЅ")]
+    [StringLength(100, MinimumLength = 2, ErrorMessage = "РќР°Р·РІР°РЅРёРµ РіРѕСЂРѕРґР° РґРѕР»Р¶РЅРѕ Р±С‹С‚СЊ РѕС‚ 2 РґРѕ 100 СЃРёРјРІРѕР»РѕРІ")]
     public string City { get; init; }
 
-    [Required(ErrorMessage = "Адрес обязателен")]
-    [StringLength(200, MinimumLength = 5, ErrorMessage = "Адрес должен быть от 5 до 200 символов")]
-    [RegularExpression(@"^[а-яА-ЯёЁ0-9\s\/\-\.\,]+$", ErrorMessage = "Адрес содержит недопустимые символы")]
+    [Required(ErrorMessage = "РђРґСЂРµСЃ РѕР±СЏР·Р°С‚РµР»РµРЅ")]
+    [StringLength(200, MinimumLength = 5, ErrorMessage = "РђРґСЂРµСЃ РґРѕР»Р¶РµРЅ Р±С‹С‚СЊ РѕС‚ 5 РґРѕ 200 СЃРёРјРІРѕР»РѕРІ")]
+    [RegularExpression(@"^[Р°-СЏРђ-РЇС‘РЃ0-9\s\/\-\.\,]+$", ErrorMessage = "РђРґСЂРµСЃ СЃРѕРґРµСЂР¶РёС‚ РЅРµРґРѕРїСѓСЃС‚РёРјС‹Рµ СЃРёРјРІРѕР»С‹")]
     public string Address { get; init; }
 }

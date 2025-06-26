@@ -4,12 +4,12 @@ namespace DeliveryApp.Models;
 
 public record OrderRequest
 {
-    [Required(ErrorMessage = "Данные отправителя обязательны")]
+    [Required(ErrorMessage = "Р”Р°РЅРЅС‹Рµ РѕС‚РїСЂР°РІРёС‚РµР»СЏ РѕР±СЏР·Р°С‚РµР»СЊРЅС‹")]
     public Location SenderLocation { get; init; }
 
-    [Required(ErrorMessage = "Данные получателя обязательны")]
+    [Required(ErrorMessage = "Р”Р°РЅРЅС‹Рµ РїРѕР»СѓС‡Р°С‚РµР»СЏ РѕР±СЏР·Р°С‚РµР»СЊРЅС‹")]
     public Location ReceiverLocation { get; init; }
 
-    [Required(ErrorMessage = "Данные груза обязательны")]
+    [Required(ErrorMessage = "Р”Р°РЅРЅС‹Рµ РіСЂСѓР·Р° РѕР±СЏР·Р°С‚РµР»СЊРЅС‹")]
     public Cargo Cargo { get; init; }
 }

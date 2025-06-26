@@ -4,10 +4,10 @@ namespace DeliveryApp.Models;
 
 public record Cargo
 {
-    [Required(ErrorMessage = "Вес обязателен")]
-    [Range(0.1, 1000, ErrorMessage = "Вес должен быть от 0.1 до 1000 кг")]
+    [Required(ErrorMessage = "Р’РµСЃ РѕР±СЏР·Р°С‚РµР»РµРЅ")]
+    [Range(0.1, 1000, ErrorMessage = "Р’РµСЃ РґРѕР»Р¶РµРЅ Р±С‹С‚СЊ РѕС‚ 0.1 РґРѕ 1000 РєРі")]
     public double Weight { get; init; }
 
-    [Required(ErrorMessage = "Дата забора обязательна")]
+    [Required(ErrorMessage = "Р”Р°С‚Р° Р·Р°Р±РѕСЂР° РѕР±СЏР·Р°С‚РµР»СЊРЅР°")]
     public DateTime PickupDate { get; init; }
 }
