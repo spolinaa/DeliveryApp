@@ -10,6 +10,5 @@ public record Location
 
     [Required(ErrorMessage = "Адрес обязателен")]
     [StringLength(200, MinimumLength = 5, ErrorMessage = "Адрес должен быть от 5 до 200 символов")]
-    [RegularExpression(@"^[а-яА-ЯёЁ0-9\s\/\-\.\,]+$", ErrorMessage = "Адрес содержит недопустимые символы")]
     public string Address { get; init; }
 }
