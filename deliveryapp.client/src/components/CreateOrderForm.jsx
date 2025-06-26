@@ -16,7 +16,8 @@ const CreateOrderForm = ({ onCreate, onCancel }) => {
     receiverCity: '',
     receiverAddress: '',
     cargoWeight: '',
-    pickupDate: ''
+    pickupDate: '',
+    senderAndReceiverLocations: ''
   });
 
   const validateField = (name, value) => {
@@ -26,7 +27,7 @@ const CreateOrderForm = ({ onCreate, onCancel }) => {
       case 'senderCity':
       case 'receiverCity':
         if (!value.trim()) error = 'Это поле обязательно';
-        else if (value.length < 3) error = 'Минимум 2 символа';
+        else if (value.length < 3) error = 'Минимум 3 символа';
         else if (value.length > 100) error = 'Максимум 100 символов';
         break;
       case 'senderAddress':
@@ -49,6 +50,12 @@ const CreateOrderForm = ({ onCreate, onCancel }) => {
     return error;
   };
 
+  const validateSenderAndReceiverLocations = (formData) => {
+    if (formData.senderCity == formData.receiverCity && formData.senderAddress == formData.receiverAddress)
+      return 'Город и адрес отправителя и получателя должны быть разными';
+    return '';
+  }
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({
@@ -65,6 +72,7 @@ const CreateOrderForm = ({ onCreate, onCancel }) => {
     }));
   };
 
+
   const validateForm = () => {
     const newErrors = {
       senderCity: validateField('senderCity', formData.senderCity),
@@ -72,7 +80,8 @@ const CreateOrderForm = ({ onCreate, onCancel }) => {
       receiverCity: validateField('receiverCity', formData.receiverCity),
       receiverAddress: validateField('receiverAddress', formData.receiverAddress),
       cargoWeight: validateField('cargoWeight', formData.cargoWeight),
-      pickupDate: validateField('pickupDate', formData.pickupDate)
+      pickupDate: validateField('pickupDate', formData.pickupDate),
+      senderAndReceiverLocations: validateSenderAndReceiverLocations(formData)
     };
     
     setErrors(newErrors);
@@ -178,7 +187,7 @@ const CreateOrderForm = ({ onCreate, onCancel }) => {
           />
           {errors.pickupDate && <div className="error-message">{errors.pickupDate}</div>}
         </div>
-        
+        {errors.senderAndReceiverLocations && <div className="error-message">{errors.senderAndReceiverLocations}</div>}
         <div className="form-actions">
           <button type="submit">Создать заказ</button>
           <button type="button" onClick={onCancel}>Отмена</button>
