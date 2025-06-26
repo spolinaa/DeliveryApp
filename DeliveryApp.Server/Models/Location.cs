@@ -1,0 +1,15 @@
+using System.ComponentModel.DataAnnotations;
+
+namespace DeliveryApp.Models;
+
+public record Location
+{
+    [Required(ErrorMessage = "Город обязателен")]
+    [StringLength(100, MinimumLength = 2, ErrorMessage = "Название города должно быть от 2 до 100 символов")]
+    public string City { get; init; }
+
+    [Required(ErrorMessage = "Адрес обязателен")]
+    [StringLength(200, MinimumLength = 5, ErrorMessage = "Адрес должен быть от 5 до 200 символов")]
+    [RegularExpression(@"^[а-яА-ЯёЁ0-9\s\/\-\.\,]+$", ErrorMessage = "Адрес содержит недопустимые символы")]
+    public string Address { get; init; }
+}
