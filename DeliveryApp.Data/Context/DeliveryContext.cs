@@ -1,4 +1,4 @@
-﻿using DeliveryApp.Models.DbEntities;
+﻿using DeliveryApp.Models.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace DeliveryApp.Models;

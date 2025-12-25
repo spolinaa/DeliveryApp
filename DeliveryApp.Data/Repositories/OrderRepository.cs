@@ -1,5 +1,5 @@
 using DeliveryApp.Models;
-using DeliveryApp.Models.DbEntities;
+using DeliveryApp.Models.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace DeliveryApp.Data.Repositories;

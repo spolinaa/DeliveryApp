@@ -1,11 +1,11 @@
-using DeliveryApp.Models;
-using DeliveryApp.Models.DbEntities;
+using DeliveryApp.Models.DTOs.Requests;
+using DeliveryApp.Models.Entities;
 
-namespace DeliveryApp.Interfaces;
+namespace DeliveryApp.Services.Interfaces;
 
 public interface IDeliveryService
 {
-    Task<Order> CreateOrder(OrderRequest order);
+    Task<Order> CreateOrder(CreateOrderRequest createOrder);
     
     Task<IReadOnlyCollection<Order>> GetOrders();
     

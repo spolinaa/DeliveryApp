@@ -1,4 +1,4 @@
-namespace DeliveryApp.Models.DbEntities;
+namespace DeliveryApp.Models.Entities;
 
 public class Order
 {

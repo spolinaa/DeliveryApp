@@ -1,10 +1,10 @@
-using DeliveryApp.Interfaces;
-using DeliveryApp.Models;
-using DeliveryApp.Models.DbEntities;
+using DeliveryApp.Services.Interfaces;
+using DeliveryApp.Models.DTOs.Requests;
+using DeliveryApp.Models.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace DeliveryApp.Controllers;
+namespace DeliveryApp.WebApi.Controllers;
 
 [ApiController]
 [Route("api/[controller]/[action]")]
@@ -20,11 +20,11 @@ public class DeliveryController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult> CreateOrder(OrderRequest order)
+    public async Task<ActionResult> CreateOrder(CreateOrderRequest createOrder)
     {
         try
         {
-            var createdOrder = await _deliveryService.CreateOrder(order);
+            var createdOrder = await _deliveryService.CreateOrder(createOrder);
             return Ok(createdOrder);
         }
         catch (ArgumentException ex)

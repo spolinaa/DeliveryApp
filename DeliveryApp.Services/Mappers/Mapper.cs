@@ -1,11 +1,11 @@
-using DeliveryApp.Models;
-using DeliveryApp.Models.DbEntities;
+using DeliveryApp.Models.DTOs.Requests;
+using DeliveryApp.Models.Entities;
 
-namespace DeliveryApp.Mappers;
+namespace DeliveryApp.Services.Mappers;
 
 public static class Mapper
 {
-    public static Order Map(this OrderRequest order)
+    public static Order Map(this CreateOrderRequest order)
     {
         return new Order
         {

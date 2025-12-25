@@ -1,15 +1,15 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace DeliveryApp.Models;
+namespace DeliveryApp.Models.DTOs.Requests;
 
-public record OrderRequest
+public record CreateOrderRequest
 {
     [Required(ErrorMessage = "Данные отправителя обязательны")]
-    public LocationDto SenderLocationDto { get; init; }
+    public LocationDto SenderLocation { get; init; }
 
     [Required(ErrorMessage = "Данные получателя обязательны")]
-    public LocationDto ReceiverLocationDto { get; init; }
+    public LocationDto ReceiverLocation { get; init; }
 
     [Required(ErrorMessage = "Данные груза обязательны")]
-    public CargoDto CargoDto { get; init; }
+    public CargoDto Cargo { get; init; }
 }

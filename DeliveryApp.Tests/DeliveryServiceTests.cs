@@ -1,10 +1,10 @@
 ﻿using DeliveryApp.Models;
-using DeliveryApp.Models.DbEntities;
+using DeliveryApp.Models.Entities;
 using DeliveryApp.Services;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using NUnit.Framework;
-using System.Runtime.CompilerServices;
+using DeliveryApp.Data.Repositories;
+using DeliveryApp.Models.DTOs;
+using DeliveryApp.Models.DTOs.Requests;
 
 namespace DeliveryApp.Tests
 {
@@ -25,7 +25,8 @@ namespace DeliveryApp.Tests
             _context.Database.EnsureDeleted();  
             _context.Database.EnsureCreated();
             
-            _deliveryService = new DeliveryService(_context);
+            var ordersRepository = new OrderRepository(_context);
+            _deliveryService = new DeliveryService(ordersRepository);
         }
 
         [TearDown]
@@ -47,11 +48,11 @@ namespace DeliveryApp.Tests
         [Test]
         public void CreateOrder_WhenSenderAndReceiverLocationEqual_Throws()
         {
-            var orderRequest = new OrderRequest
+            var orderRequest = new CreateOrderRequest
             {
-                SenderLocation = new Location { City = "Санкт-Петербург", Address = "ул. Абвгдейкина, 35-17" },
-                ReceiverLocation = new Location { City = "Санкт-Петербург", Address = "ул. Абвгдейкина, 35-17" },
-                Cargo = new Cargo { Weight = 10, PickupDate = DateTime.UtcNow }
+                SenderLocation = new LocationDto { City = "Санкт-Петербург", Address = "ул. Абвгдейкина, 35-17" },
+                ReceiverLocation = new LocationDto { City = "Санкт-Петербург", Address = "ул. Абвгдейкина, 35-17" },
+                Cargo = new CargoDto { Weight = 10, PickupDate = DateTime.UtcNow }
             };
             Assert.ThrowsAsync<ArgumentException>(async () => await _deliveryService.CreateOrder(orderRequest));
         }
@@ -85,7 +86,7 @@ namespace DeliveryApp.Tests
         public async Task GetOrders_WhenCreateFiveOrders_ReturnsFiveOrders()
         {
             int ordersCount = 5;
-            List<OrderRequest> orderRequests = Enumerable.Range(1, ordersCount).Select(x => GetOrderRequest()).ToList();
+            List<CreateOrderRequest> orderRequests = Enumerable.Range(1, ordersCount).Select(x => GetOrderRequest()).ToList();
             List<Order> expectedOrders = orderRequests.Select((x, i) => Map(x, i + 1)).ToList();
             
             foreach (var orderRequest in orderRequests)
@@ -103,27 +104,27 @@ namespace DeliveryApp.Tests
             }
         }
 
-        private OrderRequest GetOrderRequest()
+        private CreateOrderRequest GetOrderRequest()
         {
-            return new OrderRequest
+            return new CreateOrderRequest
             {
-                SenderLocation = new Location { City = "Санкт-Петербург", Address = "ул. Абвгдейкина, 35-17" },
-                ReceiverLocation = new Location { City = "Москва", Address = "ул. Абвгдежа, 17-28" },
-                Cargo = new Cargo { Weight = 10, PickupDate = DateTime.UtcNow }
+                SenderLocation = new LocationDto { City = "Санкт-Петербург", Address = "ул. Абвгдейкина, 35-17" },
+                ReceiverLocation = new LocationDto { City = "Москва", Address = "ул. Абвгдежа, 17-28" },
+                Cargo = new CargoDto { Weight = 10, PickupDate = DateTime.UtcNow }
             };
         }
 
-        private Order Map(OrderRequest orderRequest, int id)
+        private Order Map(CreateOrderRequest createOrderRequest, int id)
         {
             return new Order
             {
                 Id = id,
-                SenderCity = orderRequest.SenderLocation.City,
-                SenderAddress = orderRequest.SenderLocation.Address,
-                ReceiverCity = orderRequest.ReceiverLocation.City,
-                ReceiverAddress = orderRequest.ReceiverLocation.Address,
-                CargoWeight = orderRequest.Cargo.Weight,
-                CargoPickupDate = orderRequest.Cargo.PickupDate,
+                SenderCity = createOrderRequest.SenderLocation.City,
+                SenderAddress = createOrderRequest.SenderLocation.Address,
+                ReceiverCity = createOrderRequest.ReceiverLocation.City,
+                ReceiverAddress = createOrderRequest.ReceiverLocation.Address,
+                CargoWeight = createOrderRequest.Cargo.Weight,
+                CargoPickupDate = createOrderRequest.Cargo.PickupDate,
             };
         }
 
@@ -132,7 +133,7 @@ namespace DeliveryApp.Tests
             Assert.That(AreEqual(realOrder, expectedOrder));
         }
 
-        private static bool AreEqual(Order order, Order anotherOrder)
+        private static bool AreEqual(Order order, Order? anotherOrder)
         {
             return anotherOrder is not null
                 && order.Id == anotherOrder.Id
@@ -140,8 +141,15 @@ namespace DeliveryApp.Tests
                 && order.SenderAddress == anotherOrder.SenderAddress
                 && order.ReceiverCity == anotherOrder.ReceiverCity
                 && order.ReceiverAddress == anotherOrder.ReceiverAddress
-                && order.CargoWeight == anotherOrder.CargoWeight
+                && AreEqual(order.CargoWeight, anotherOrder.CargoWeight)
                 && order.CargoPickupDate == anotherOrder.CargoPickupDate;
+        }
+
+        private static bool AreEqual(double a, double b)
+        {
+            return double.IsInfinity(a) || double.IsInfinity(b)
+                ? Equals(a, b)
+                : double.IsNaN(a) && double.IsNaN(b) || Math.Abs(a - b) < 1e-9;
         }
     }
 }

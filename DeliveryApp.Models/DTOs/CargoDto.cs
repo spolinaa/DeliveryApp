@@ -1,8 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace DeliveryApp.Models;
+namespace DeliveryApp.Models.DTOs;
 
-public record Cargo
+public record CargoDto
 {
     [Required(ErrorMessage = "Вес обязателен")]
     [Range(0.1, 1000, ErrorMessage = "Вес должен быть от 0.1 до 1000 кг")]

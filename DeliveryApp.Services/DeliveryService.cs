@@ -1,21 +1,21 @@
-using DeliveryApp.Interfaces;
-using DeliveryApp.Mappers;
-using DeliveryApp.Models;
-using DeliveryApp.Models.DbEntities;
-using Microsoft.EntityFrameworkCore;
+using DeliveryApp.Data.Repositories;
+using DeliveryApp.Services.Interfaces;
+using DeliveryApp.Services.Mappers;
+using DeliveryApp.Models.Entities;
+using DeliveryApp.Models.DTOs.Requests;
 
 namespace DeliveryApp.Services;
 
 public class DeliveryService : IDeliveryService
 {
-    private readonly DeliveryContext _deliveryContext;
-
-    public DeliveryService(DeliveryContext deliveryContext)
+    private readonly IOrderRepository _orders;
+    
+    public DeliveryService(IOrderRepository orderRepository)
     {
-        _deliveryContext = deliveryContext;
+        _orders = orderRepository;
     }
     
-    public async Task<Order> CreateOrder(OrderRequest orderRequest)
+    public async Task<Order> CreateOrder(CreateOrderRequest orderRequest)
     {
         if (orderRequest.SenderLocation == orderRequest.ReceiverLocation)
         {
@@ -23,19 +23,17 @@ public class DeliveryService : IDeliveryService
         }
 
         var order = orderRequest.Map();
-        _deliveryContext.Orders.Add(order);
-        await _deliveryContext.SaveChangesAsync();
-        return order;
+        return await _orders.AddOrder(order);
     }
 
     public async Task<IReadOnlyCollection<Order>> GetOrders()
     {
-        return (await _deliveryContext.Orders.ToListAsync()).AsReadOnly();
+        return await _orders.GetOrders();
     }
 
     public async Task<Order> GetOrder(int id)
     {
-        var order = await _deliveryContext.Orders.FindAsync(id);
+        var order = await _orders.GetOrder(id);
         if (order is null)
             throw new KeyNotFoundException($"Заказ с номером {id} не найден");
         return order;

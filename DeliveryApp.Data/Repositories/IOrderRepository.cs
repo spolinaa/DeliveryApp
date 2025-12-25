@@ -1,5 +1,4 @@
-using DeliveryApp.Models;
-using DeliveryApp.Models.DbEntities;
+using DeliveryApp.Models.Entities;
 
 namespace DeliveryApp.Data.Repositories;
 

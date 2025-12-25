@@ -1,8 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace DeliveryApp.Models;
+namespace DeliveryApp.Models.DTOs;
 
-public record Location
+public record LocationDto
 {
     [Required(ErrorMessage = "Город обязателен")]
     [StringLength(100, MinimumLength = 2, ErrorMessage = "Название города должно быть от 2 до 100 символов")]
