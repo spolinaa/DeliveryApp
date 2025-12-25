@@ -4,7 +4,7 @@
 
 ## Запуск веб-сервиса
 ```
-dotnet run --project ./DeliveryApp.Server
+dotnet run --project ./DeliveryApp.WebApi
 ```
 Сервис запускается по адресу: https://localhost:5173
 
