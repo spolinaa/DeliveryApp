@@ -5,11 +5,11 @@ namespace DeliveryApp.Models;
 public record OrderRequest
 {
     [Required(ErrorMessage = "Данные отправителя обязательны")]
-    public Location SenderLocation { get; init; }
+    public LocationDto SenderLocationDto { get; init; }
 
     [Required(ErrorMessage = "Данные получателя обязательны")]
-    public Location ReceiverLocation { get; init; }
+    public LocationDto ReceiverLocationDto { get; init; }
 
     [Required(ErrorMessage = "Данные груза обязательны")]
-    public Cargo Cargo { get; init; }
+    public CargoDto CargoDto { get; init; }
 }
